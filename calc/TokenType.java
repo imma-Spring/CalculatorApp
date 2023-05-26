@@ -1,3 +1,5 @@
+package calc;
+
 public enum TokenType {
     Num,
     LParen,
@@ -6,5 +8,7 @@ public enum TokenType {
     Sub,
     Mult,
     Div,
-    Pow
+    Pow,
+    EOI,
+    Invalid
 }
