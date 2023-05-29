@@ -1,9 +1,9 @@
 package calc;
 
-public class NumberNode extends ASTNode{
-    private double value;
-    public NumberNode(double value)
-    {
+public class NumberNode extends ASTNode {
+    private final double value;
+
+    public NumberNode(double value) {
         this.value = value;
     }
 

@@ -4,19 +4,9 @@ public class Lexer {
     private final String input;
     private int currentIndex;
 
-    private static Lexer lexer = null;
-
-    private Lexer(String input)
-    {
+    public Lexer(String input) {
         this.input = input;
         currentIndex = 0;
-    }
-
-    public static Lexer lexer(String input)
-    {
-        if(lexer == null)
-            lexer =  new Lexer(input);
-        return lexer;
     }
 
     public Token getNextToken() {
@@ -31,9 +21,15 @@ public class Lexer {
                 return new Token(TokenType.Add, "+");
             }
             case '-' -> {
-                if (!Character.isDigit(input.charAt(currentIndex - 2)) && input.charAt(currentIndex - 2) != ')' && Character.isDigit(input.charAt(currentIndex)))
+                try {
+                    if (currentIndex == 0 || (!Character.isDigit(input.charAt(currentIndex - 2)) && input.charAt(currentIndex - 2) != ')' && Character.isDigit(input.charAt(currentIndex))))
+                        return extractNumber(c);
+                    return new Token(TokenType.Sub, "-");
+                }
+                catch(StringIndexOutOfBoundsException e)
+                {
                     return extractNumber(c);
-                return new Token(TokenType.Sub, "-");
+                }
             }
             case '*' -> {
                 return new Token(TokenType.Mult, "*");
@@ -50,25 +46,25 @@ public class Lexer {
             case ')' -> {
                 return new Token(TokenType.RParen, ")");
             }
+            case '.' -> {
+                return extractNumber(c);
+            }
             default -> {
                 if (Character.isDigit(c))
                     return extractNumber(c);
-                return new Token(TokenType.Invalid, "" + c);
+                return new Token(TokenType.Invalid, String.valueOf(c));
             }
         }
     }
 
-    private Token extractNumber(char currentDigit)
-    {
+    private Token extractNumber(char currentDigit) {
         StringBuilder s = new StringBuilder();
         byte decimals = 0;
         s.append(currentDigit);
-        while(currentIndex < input.length() && (Character.isDigit(input.charAt(currentIndex)) || input.charAt(currentIndex) == '.'))
-        {
-            if(input.charAt(currentIndex) == '.')
-            {
+        while (currentIndex < input.length() && (Character.isDigit(input.charAt(currentIndex)) || input.charAt(currentIndex) == '.')) {
+            if (input.charAt(currentIndex) == '.') {
                 decimals++;
-                if(decimals >= 2)
+                if (decimals >= 2)
                     break;
             }
             s.append(input.charAt(currentIndex++));
