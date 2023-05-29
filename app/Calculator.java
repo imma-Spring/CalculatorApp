@@ -23,6 +23,9 @@ public class Calculator extends JFrame {
     private final JButton equals;
     private final JButton decimal;
     private final JButton clear;
+    private final JButton lparen;
+    private final JButton rparen;
+    private final JButton del;
     private String value;
     private boolean state;
     private ASTNode ast;
@@ -46,10 +49,13 @@ public class Calculator extends JFrame {
         equals = new JButton("=");
         decimal = new JButton(".");
         clear = new JButton("C");
+        lparen = new JButton("(");
+        rparen = new JButton(")");
+        del = new JButton("del");
 
         initializeButtonListeners();
 
-        JPanel buttonPanel = new JPanel(new GridLayout(6, 6));
+        JPanel buttonPanel = new JPanel(new GridLayout(7, 3));
         buttonPanel.add(numberButtons[8]);
         buttonPanel.add(numberButtons[9]);
         buttonPanel.add(pow);
@@ -66,6 +72,9 @@ public class Calculator extends JFrame {
         buttonPanel.add(numberButtons[1]);
         buttonPanel.add(add);
         buttonPanel.add(decimal);
+        buttonPanel.add(lparen);
+        buttonPanel.add(rparen);
+        buttonPanel.add(del);
         buttonPanel.add(clear);
         buttonPanel.add(equals);
 
@@ -142,6 +151,15 @@ public class Calculator extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 value = "";
                 display.setText("");
+            }
+        });
+        lparen.addActionListener(opListener);
+        rparen.addActionListener(opListener);
+        del.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                value = value.substring(0, value.length() - 1);
+                display.setText(value);
             }
         });
     }
